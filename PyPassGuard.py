@@ -57,18 +57,19 @@ def generate_password(length=12):
     return ''.join(random.choice(chars) for _ in range(length))
 
 def save_generated_password(password):
-    """Save generated password as json file with timestamp + score"""
+    """Save generated password to JSON file with timestamp + score"""
     history = load_history()
-    score = check_password(password)
-    
-    entry={
+    score, _ = check_password(password)
+
+    entry = {
         "password": password,
         "score": score,
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
+
     history.append(entry)
     save_history(history)
-    print(f"\u2705Saved to {PASSWORD_FILE}")
+    print(f"✅ Saved to {PASSWORD_FILE}")
 
 def show_history():
     """Show saved passwords"""
