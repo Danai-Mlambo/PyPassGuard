@@ -57,31 +57,35 @@ def generate_password(length=12):
     return ''.join(random.choice(chars) for _ in range(length))
 
 def save_generated_password(password):
-    """Save generated password to JSON file with timestamp + score"""
+    """Save password score and timestamp without storing the password"""
     history = load_history()
     score, _ = check_password(password)
 
     entry = {
-        "password": password,
         "score": score,
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
     history.append(entry)
     save_history(history)
+    print(f"✅ Password score saved to {PASSWORD_FILE}")
+
+    history.append(entry)
+    save_history(history)
     print(f"✅ Saved to {PASSWORD_FILE}")
 
 def show_history():
-    """Show saved passwords"""
+    """Show saved password scores"""
     history = load_history()
+
     if not history:
-        print("\U0001F4BENo saved passwords")
+        print("💾 No saved password history")
         return
 
-    print("\n====\U0001F4BESaved Passwords====")
+    print("\n====💾 Password History ====")
+
     for i, entry in enumerate(history, 1):
         print(f"{i}. Score: {entry['score']}/100 | {entry['timestamp']}")
-        print(f" Password: {entry['password']}\n")
 
 # CLI menu
 while True:
